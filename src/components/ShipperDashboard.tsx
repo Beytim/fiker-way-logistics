@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import ShipmentForm from "./ShipmentForm";
+import DriverQuotes from "./DriverQuotes";
+import ShipmentStatus from "./ShipmentStatus";
 import { 
   Package, 
   MapPin, 
@@ -13,11 +13,44 @@ import {
   Star,
   Plus,
   Filter,
-  Search
+  Search,
+  Eye
 } from "lucide-react";
+
+interface ShipmentFormData {
+  pickupLocation: string;
+  deliveryLocation: string;
+  cargoType: string;
+  weight: string;
+  dimensions: string;
+  pickupDate: string;
+  deliveryDate: string;
+  specialInstructions: string;
+  budget: string;
+  urgency: "low" | "medium" | "high";
+}
+
+interface DriverQuote {
+  id: string;
+  driverName: string;
+  rating: number;
+  totalTrips: number;
+  vehicleType: string;
+  vehicleNumber: string;
+  quotedPrice: number;
+  estimatedTime: string;
+  distance: string;
+  isVerified: boolean;
+  specializations: string[];
+  responseTime: string;
+  avatar?: string;
+}
 
 const ShipperDashboard = () => {
   const [activeTab, setActiveTab] = useState("post-load");
+  const [currentShipmentId, setCurrentShipmentId] = useState<string | null>(null);
+  const [showQuotes, setShowQuotes] = useState(false);
+  const [viewingShipment, setViewingShipment] = useState<string | null>(null);
 
   const shipments = [
     {
@@ -29,7 +62,8 @@ const ShipperDashboard = () => {
       rating: 4.8,
       cargo: "Electronics",
       weight: "2.5 tons",
-      estimatedDelivery: "2 hours"
+      estimatedDelivery: "2 hours",
+      hasQuotes: false
     },
     {
       id: "FW-002",
@@ -40,9 +74,42 @@ const ShipperDashboard = () => {
       rating: 5.0,
       cargo: "Textiles",
       weight: "1.8 tons",
-      estimatedDelivery: "Delivered"
+      estimatedDelivery: "Delivered",
+      hasQuotes: false
+    },
+    {
+      id: "FW-003",
+      from: "Mekelle",
+      to: "Dessie",
+      status: "pending",
+      driver: null,
+      rating: 0,
+      cargo: "Medical Supplies",
+      weight: "1.2 tons",
+      estimatedDelivery: "Awaiting driver",
+      hasQuotes: true
     }
   ];
+
+  const handleShipmentSubmit = (data: ShipmentFormData) => {
+    // Generate a new shipment ID
+    const newShipmentId = `FW-${String(Date.now()).slice(-3)}`;
+    setCurrentShipmentId(newShipmentId);
+    setShowQuotes(true);
+    setActiveTab("quotes");
+  };
+
+  const handleDriverSelect = (quote: DriverQuote) => {
+    // Handle driver selection logic
+    console.log("Selected driver:", quote);
+    setShowQuotes(false);
+    setActiveTab("shipments");
+  };
+
+  const handleViewShipment = (shipmentId: string) => {
+    setViewingShipment(shipmentId);
+    setActiveTab("view-shipment");
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -97,6 +164,30 @@ const ShipperDashboard = () => {
             >
               My Shipments
             </button>
+            {showQuotes && (
+              <button
+                onClick={() => setActiveTab("quotes")}
+                className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                  activeTab === "quotes"
+                    ? "border-primary text-primary" 
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Driver Quotes
+              </button>
+            )}
+            {viewingShipment && (
+              <button
+                onClick={() => setActiveTab("view-shipment")}
+                className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                  activeTab === "view-shipment"
+                    ? "border-primary text-primary" 
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Shipment Details
+              </button>
+            )}
             <button
               onClick={() => setActiveTab("drivers")}
               className={`py-4 px-2 border-b-2 font-medium text-sm ${
@@ -113,58 +204,24 @@ const ShipperDashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         {activeTab === "post-load" && (
-          <div className="max-w-2xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Plus className="h-5 w-5 text-primary" />
-                  <span>Post New Load</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="pickup">Pickup Location</Label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input id="pickup" placeholder="Enter pickup address" className="pl-10" />
-                    </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="dropoff">Drop-off Location</Label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input id="dropoff" placeholder="Enter drop-off address" className="pl-10" />
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="cargo-type">Cargo Type</Label>
-                    <Input id="cargo-type" placeholder="e.g., Electronics, Textiles" />
-                  </div>
-                  <div>
-                    <Label htmlFor="weight">Weight (tons)</Label>
-                    <Input id="weight" type="number" placeholder="2.5" />
-                  </div>
-                </div>
-                
-                <div>
-                  <Label htmlFor="description">Additional Details</Label>
-                  <Textarea 
-                    id="description" 
-                    placeholder="Fragile items, special handling instructions..."
-                    rows={3}
-                  />
-                </div>
-                
-                <Button className="w-full bg-primary hover:bg-primary/90">
-                  Post Load & Get Quotes
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+          <ShipmentForm onSubmit={handleShipmentSubmit} />
+        )}
+
+        {activeTab === "quotes" && currentShipmentId && (
+          <DriverQuotes 
+            shipmentId={currentShipmentId} 
+            onSelectDriver={handleDriverSelect}
+          />
+        )}
+
+        {activeTab === "view-shipment" && viewingShipment && (
+          <ShipmentStatus 
+            shipmentId={viewingShipment}
+            onTrackLive={() => {
+              // Navigate to live tracking
+              window.location.href = `/track?id=${viewingShipment}`;
+            }}
+          />
         )}
 
         {activeTab === "shipments" && (
@@ -196,6 +253,11 @@ const ShipperDashboard = () => {
                           <Badge className={getStatusColor(shipment.status)}>
                             {shipment.status.replace("-", " ").toUpperCase()}
                           </Badge>
+                          {shipment.hasQuotes && (
+                            <Badge className="bg-accent text-accent-foreground">
+                              New Quotes Available
+                            </Badge>
+                          )}
                         </div>
                         
                         <div className="grid md:grid-cols-3 gap-4 mb-4">
@@ -209,18 +271,30 @@ const ShipperDashboard = () => {
                           </div>
                           <div>
                             <p className="text-sm text-muted-foreground">Driver</p>
-                            <div className="flex items-center space-x-1">
-                              <span className="font-medium">{shipment.driver}</span>
-                              <div className="flex items-center">
-                                <Star className="h-3 w-3 fill-warning text-warning" />
-                                <span className="text-xs ml-1">{shipment.rating}</span>
+                            {shipment.driver ? (
+                              <div className="flex items-center space-x-1">
+                                <span className="font-medium">{shipment.driver}</span>
+                                <div className="flex items-center">
+                                  <Star className="h-3 w-3 fill-warning text-warning" />
+                                  <span className="text-xs ml-1">{shipment.rating}</span>
+                                </div>
                               </div>
-                            </div>
+                            ) : (
+                              <span className="text-muted-foreground">Awaiting assignment</span>
+                            )}
                           </div>
                         </div>
                       </div>
                       
                       <div className="flex items-center space-x-2 mt-4 md:mt-0">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleViewShipment(shipment.id)}
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          View Details
+                        </Button>
                         {shipment.status === "in-transit" && (
                           <>
                             <div className="flex items-center space-x-1 text-sm text-muted-foreground">
@@ -235,6 +309,19 @@ const ShipperDashboard = () => {
                         {shipment.status === "delivered" && (
                           <Button variant="outline" size="sm">
                             View Receipt
+                          </Button>
+                        )}
+                        {shipment.hasQuotes && (
+                          <Button 
+                            size="sm" 
+                            className="bg-accent hover:bg-accent/90"
+                            onClick={() => {
+                              setCurrentShipmentId(shipment.id);
+                              setShowQuotes(true);
+                              setActiveTab("quotes");
+                            }}
+                          >
+                            View Quotes
                           </Button>
                         )}
                       </div>

@@ -13,15 +13,22 @@ import {
   Globe,
   ChevronRight,
   Phone,
-  Mail
+  Mail,
+  Search
 } from "lucide-react";
-import heroImage from "@/assets/hero-logistics.jpg";
 
 const Index = () => {
   const [language, setLanguage] = useState("English");
+  const [trackingId, setTrackingId] = useState("");
 
   const toggleLanguage = () => {
     setLanguage(language === "English" ? "አማርኛ" : "English");
+  };
+
+  const handleQuickTrack = () => {
+    if (trackingId.trim()) {
+      window.location.href = `/track?id=${trackingId}`;
+    }
   };
 
   const translations = {
@@ -30,7 +37,9 @@ const Index = () => {
         title: "FikerWay",
         subtitle: "Ethiopia's Trusted Freight Network",
         description: "Connect shippers with verified drivers across Ethiopia. Safe, reliable, and culturally adapted logistics for your business.",
-        cta: "Get Started"
+        cta: "Get Started",
+        trackPlaceholder: "Enter tracking ID (e.g., FW-001)",
+        trackButton: "Track Shipment"
       },
       userTypes: {
         title: "Choose Your Role",
@@ -75,7 +84,9 @@ const Index = () => {
         title: "ፍከርዋይ",
         subtitle: "የኢትዮጵያ የተመከረ የጭነት መረብ",
         description: "በኢትዮጵያ ውስጥ አስተማማኝ ሾፌሮች ጋር ጭነት ላኪዎችን ያገናኛል። ለንግድዎ ደህንነቱ የተጠበቀ፣ አስተማማኝ እና በባህል የተላመደ ሎጂስቲክስ።",
-        cta: "ይጀምሩ"
+        cta: "ይጀምሩ",
+        trackPlaceholder: "የመከታተያ መለያ ያስገቡ (ለምሳሌ፣ FW-001)",
+        trackButton: "ጭነት ይከታተሉ"
       },
       userTypes: {
         title: "የእርስዎን ሚና ይምረጡ",
@@ -148,11 +159,8 @@ const Index = () => {
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-16 overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-hero">
+          <div className="absolute inset-0 bg-primary/20" />
         </div>
         
         <div className="relative container mx-auto px-4 py-16 md:py-24">
@@ -169,15 +177,37 @@ const Index = () => {
             <p className="text-lg text-white/80 mb-8 leading-relaxed">
               {t.hero.description}
             </p>
-            <Button asChild size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
-              <a href="/track">{t.hero.cta}</a>
-            </Button>
+            
+            {/* Quick Track and CTA */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              <div className="flex-1 max-w-md">
+                <div className="flex">
+                  <input
+                    type="text"
+                    placeholder={t.hero.trackPlaceholder}
+                    value={trackingId}
+                    onChange={(e) => setTrackingId(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleQuickTrack()}
+                    className="flex-1 px-4 py-3 rounded-l-lg border-0 bg-white/95 backdrop-blur-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-secondary"
+                  />
+                  <Button 
+                    onClick={handleQuickTrack}
+                    className="rounded-l-none bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <Button asChild size="lg" className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm">
+                <a href="#user-types">{t.hero.cta}</a>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* User Type Selection */}
-      <section className="py-16 bg-muted/30">
+      <section id="user-types" className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">{t.userTypes.title}</h2>
           
