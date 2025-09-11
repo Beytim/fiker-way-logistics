@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -168,9 +169,8 @@ const Index = () => {
             <p className="text-lg text-white/80 mb-8 leading-relaxed">
               {t.hero.description}
             </p>
-            <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
-              {t.hero.cta}
-              <ChevronRight className="ml-2 h-5 w-5" />
+            <Button asChild size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
+              <a href="/track">{t.hero.cta}</a>
             </Button>
           </div>
         </div>
@@ -201,8 +201,8 @@ const Index = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button className="mt-6 w-full bg-primary hover:bg-primary/90">
-                    Continue as Shipper
+                  <Button asChild className="mt-6 w-full bg-primary hover:bg-primary/90">
+                    <Link to="/shipper">Continue as Shipper</Link>
                   </Button>
                 </div>
               </CardContent>
@@ -227,8 +227,8 @@ const Index = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button variant="outline" className="mt-6 w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-                    Continue as Driver
+                  <Button asChild variant="outline" className="mt-6 w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+                    <Link to="/driver">Continue as Driver</Link>
                   </Button>
                 </div>
               </CardContent>
@@ -253,8 +253,8 @@ const Index = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button variant="outline" className="mt-6 w-full border-warning text-warning hover:bg-warning hover:text-warning-foreground">
-                    Admin Access
+                  <Button asChild variant="outline" className="mt-6 w-full border-warning text-warning hover:bg-warning hover:text-warning-foreground">
+                    <Link to="/admin">Admin Access</Link>
                   </Button>
                 </div>
               </CardContent>
