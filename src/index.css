@@ -2,39 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* FikerWay Design System - Ethiopian-inspired logistics platform
+All colors MUST be HSL for proper theme support
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base colors */
+    --background: 48 100% 98%;
+    --foreground: 200 15% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 200 15% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 200 15% 8%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Ethiopian Green - Primary brand color */
+    --primary: 140 100% 20%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Warm Ethiopian Yellow - Secondary */
+    --secondary: 48 100% 50%;
+    --secondary-foreground: 200 15% 8%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted earth tones */
+    --muted: 30 20% 94%;
+    --muted-foreground: 200 8% 46%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Trust accent - Warm blue */
+    --accent: 200 90% 45%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Ethiopian Red - For warnings/alerts */
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and inputs */
+    --border: 30 20% 88%;
+    --input: 30 20% 88%;
+    --ring: 140 100% 20%;
+
+    /* Success and trust indicators */
+    --success: 140 70% 35%;
+    --success-foreground: 0 0% 98%;
+
+    /* Warning - Ethiopian yellow variant */
+    --warning: 45 90% 55%;
+    --warning-foreground: 200 15% 8%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(140 100% 20%), hsl(140 80% 30%));
+    --gradient-warm: linear-gradient(135deg, hsl(48 100% 50%), hsl(35 100% 60%));
+    --gradient-trust: linear-gradient(135deg, hsl(200 90% 45%), hsl(200 70% 55%));
+    --gradient-hero: linear-gradient(135deg, hsl(140 100% 20%), hsl(48 100% 50%), hsl(0 85% 55%));
+
+    /* Shadows */
+    --shadow-soft: 0 2px 8px hsl(140 50% 20% / 0.08);
+    --shadow-medium: 0 4px 16px hsl(140 50% 20% / 0.12);
+    --shadow-strong: 0 8px 24px hsl(140 50% 20% / 0.16);
+    --shadow-trust: 0 4px 16px hsl(200 90% 45% / 0.15);
 
     --radius: 0.5rem;
 
