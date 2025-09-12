@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, CheckCircle, Package, Truck } from "lucide-react";
+import { Bell, CheckCircle, Package, Truck, X } from "lucide-react";
 import { toast } from "sonner";
 
-const NotificationSystem = () => {
+interface NotificationSystemProps {
+  userType: "shipper" | "driver" | "admin";
+}
+
+const NotificationSystem = ({ userType }: NotificationSystemProps) => {
   const [notifications] = useState([
     {
       id: "N001",
@@ -34,40 +37,60 @@ const NotificationSystem = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <Card>
-        <div className="p-4 border-b">
+    <div className="w-full">
+      <div className="p-4 border-b bg-muted/30">
+        <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Bell className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-semibold">ማሳወቂያዎች (Notifications)</h2>
-            <Badge className="bg-destructive text-destructive-foreground">2</Badge>
+            <Bell className="h-4 w-4 text-primary" />
+            <h3 className="font-medium">Notifications</h3>
+            <Badge variant="destructive" className="text-xs">
+              {notifications.filter(n => !n.read).length}
+            </Badge>
           </div>
+          <Button variant="ghost" size="sm" className="text-xs">
+            Mark all read
+          </Button>
         </div>
+      </div>
 
-        <div className="p-4 space-y-3">
-          {notifications.map((notification) => (
-            <Card key={notification.id} className="cursor-pointer hover:shadow-md">
-              <CardContent className="p-4">
+      <div className="max-h-80 overflow-y-auto">
+        {notifications.length === 0 ? (
+          <div className="p-8 text-center text-muted-foreground">
+            <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
+            <p className="text-sm">No notifications</p>
+          </div>
+        ) : (
+          <div className="divide-y">
+            {notifications.map((notification) => (
+              <div key={notification.id} className="p-3 hover:bg-muted/50 cursor-pointer">
                 <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 mt-1">
                     {getNotificationIcon(notification.type)}
                   </div>
                   
-                  <div className="flex-1">
-                    <h3 className="text-sm font-medium">{notification.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-1">{notification.message}</p>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-medium truncate">{notification.title}</h4>
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{notification.message}</p>
                     <span className="text-xs text-muted-foreground">{notification.timestamp}</span>
                   </div>
                   
-                  {!notification.read && (
-                    <div className="w-2 h-2 bg-primary rounded-full" />
-                  )}
+                  <div className="flex items-center space-x-1">
+                    {!notification.read && (
+                      <div className="w-2 h-2 bg-primary rounded-full" />
+                    )}
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Card>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      <div className="p-3 border-t bg-muted/30">
+        <Button variant="outline" size="sm" className="w-full text-xs">
+          View All Notifications
+        </Button>
+      </div>
     </div>
   );
 };

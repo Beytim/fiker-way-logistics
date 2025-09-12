@@ -122,9 +122,9 @@ const DriverDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pt-16">
       {/* Header */}
-      <header className="border-b bg-card">
+      <header className="border-b bg-card sticky top-16 z-40">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -151,7 +151,7 @@ const DriverDashboard = () => {
       </header>
 
       {/* Stats Cards */}
-      <div className="container mx-auto px-4 py-6">
+      <section className="container mx-auto px-4 py-6">
         <div className="grid md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardContent className="p-4">
@@ -201,15 +201,15 @@ const DriverDashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </section>
 
       {/* Navigation Tabs */}
-      <div className="border-b">
+      <div className="border-b bg-background sticky top-32 z-30">
         <div className="container mx-auto px-4">
-          <nav className="flex space-x-8">
+          <nav className="flex space-x-8 overflow-x-auto">
             <button
               onClick={() => setActiveTab("available-loads")}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+              className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap ${
                 activeTab === "available-loads" 
                   ? "border-primary text-primary" 
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -219,7 +219,7 @@ const DriverDashboard = () => {
             </button>
             <button
               onClick={() => setActiveTab("my-jobs")}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+              className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap ${
                 activeTab === "my-jobs"
                   ? "border-primary text-primary" 
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -229,7 +229,7 @@ const DriverDashboard = () => {
             </button>
             <button
               onClick={() => setActiveTab("earnings")}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+              className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap ${
                 activeTab === "earnings"
                   ? "border-primary text-primary" 
                   : "border-transparent text-muted-foreground hover:text-foreground"

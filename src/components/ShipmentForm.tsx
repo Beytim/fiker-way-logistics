@@ -22,7 +22,8 @@ const ShipmentForm = () => {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto">
+      <Card>
       <CardHeader className="text-center">
         <div className="flex items-center justify-center space-x-2 mb-2">
           <Package className="h-6 w-6 text-primary" />
@@ -87,6 +88,7 @@ const ShipmentForm = () => {
         </form>
       </CardContent>
     </Card>
+    </div>
   );
 };
 

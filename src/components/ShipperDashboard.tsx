@@ -121,9 +121,9 @@ const ShipperDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pt-16">
       {/* Header */}
-      <header className="border-b bg-card">
+      <header className="border-b bg-card sticky top-16 z-40">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -141,12 +141,12 @@ const ShipperDashboard = () => {
       </header>
 
       {/* Navigation Tabs */}
-      <div className="border-b">
+      <div className="border-b bg-background sticky top-32 z-30">
         <div className="container mx-auto px-4">
-          <nav className="flex space-x-8">
+          <nav className="flex space-x-8 overflow-x-auto">
             <button
               onClick={() => setActiveTab("post-load")}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+              className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap ${
                 activeTab === "post-load" 
                   ? "border-primary text-primary" 
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -156,7 +156,7 @@ const ShipperDashboard = () => {
             </button>
             <button
               onClick={() => setActiveTab("shipments")}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+              className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap ${
                 activeTab === "shipments"
                   ? "border-primary text-primary" 
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -167,7 +167,7 @@ const ShipperDashboard = () => {
             {showQuotes && (
               <button
                 onClick={() => setActiveTab("quotes")}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === "quotes"
                     ? "border-primary text-primary" 
                     : "border-transparent text-muted-foreground hover:text-foreground"
@@ -179,7 +179,7 @@ const ShipperDashboard = () => {
             {viewingShipment && (
               <button
                 onClick={() => setActiveTab("view-shipment")}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === "view-shipment"
                     ? "border-primary text-primary" 
                     : "border-transparent text-muted-foreground hover:text-foreground"
@@ -190,7 +190,7 @@ const ShipperDashboard = () => {
             )}
             <button
               onClick={() => setActiveTab("drivers")}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+              className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap ${
                 activeTab === "drivers"
                   ? "border-primary text-primary" 
                   : "border-transparent text-muted-foreground hover:text-foreground"
