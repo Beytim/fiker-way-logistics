@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { 
   Package, 
@@ -9,11 +9,10 @@ import {
   MapPin, 
   Clock, 
   CheckCircle, 
-  AlertTriangle,
   Phone,
-  MessageCircle,
-  Navigation,
-  Star
+  MessageSquare,
+  Star,
+  AlertTriangle
 } from "lucide-react";
 
 interface ShipmentStatusProps {
@@ -21,296 +20,216 @@ interface ShipmentStatusProps {
   onTrackLive?: () => void;
 }
 
-interface StatusUpdate {
-  id: string;
-  status: "pending" | "accepted" | "picked-up" | "in-transit" | "delivered";
-  timestamp: string;
-  location: string;
-  description: string;
-  isCompleted: boolean;
-}
-
-interface ShipmentDetails {
-  id: string;
-  from: string;
-  to: string;
-  cargo: string;
-  weight: string;
-  currentStatus: string;
-  progress: number;
-  driver: {
-    name: string;
-    rating: number;
-    phone: string;
-    vehicleNumber: string;
-  };
-  estimatedDelivery: string;
-  actualDelivery?: string;
-  statusUpdates: StatusUpdate[];
-}
-
 const ShipmentStatus = ({ shipmentId, onTrackLive }: ShipmentStatusProps) => {
-  const [shipment, setShipment] = useState<ShipmentDetails | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchShipmentDetails = async () => {
-      setLoading(true);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockShipment: ShipmentDetails = {
-        id: shipmentId,
-        from: "Addis Ababa",
-        to: "Dire Dawa",
-        cargo: "Electronics",
-        weight: "2.5 tons",
-        currentStatus: "in-transit",
-        progress: 65,
-        driver: {
-          name: "Alemayehu Tadesse",
-          rating: 4.8,
-          phone: "+251 911 234 567",
-          vehicleNumber: "ET-AA-1234"
-        },
-        estimatedDelivery: "2 hours 15 minutes",
-        statusUpdates: [
-          {
-            id: "1",
-            status: "pending",
-            timestamp: "2024-01-15 08:00",
-            location: "Addis Ababa",
-            description: "Shipment request created",
-            isCompleted: true
-          },
-          {
-            id: "2",
-            status: "accepted",
-            timestamp: "2024-01-15 08:15",
-            location: "Addis Ababa",
-            description: "Driver accepted the shipment",
-            isCompleted: true
-          },
-          {
-            id: "3",
-            status: "picked-up",
-            timestamp: "2024-01-15 09:30",
-            location: "Addis Ababa Industrial Zone",
-            description: "Cargo picked up successfully",
-            isCompleted: true
-          },
-          {
-            id: "4",
-            status: "in-transit",
-            timestamp: "2024-01-15 10:00",
-            location: "Awash Station",
-            description: "Currently en route to destination",
-            isCompleted: false
-          },
-          {
-            id: "5",
-            status: "delivered",
-            timestamp: "Expected: 2024-01-15 14:00",
-            location: "Dire Dawa Industrial Zone",
-            description: "Delivery to destination",
-            isCompleted: false
-          }
-        ]
-      };
-      
-      setShipment(mockShipment);
-      setLoading(false);
-    };
-
-    fetchShipmentDetails();
-  }, [shipmentId]);
+  const shipment = {
+    id: shipmentId,
+    status: "in_transit",
+    progress: 65,
+    pickup: "Addis Ababa, Merkato",
+    dropoff: "Dire Dawa, Industrial Zone",
+    driver: {
+      name: "አለማየሁ ታደሰ",
+      phone: "+251911234567",
+      rating: 4.8,
+      truck: "Mercedes Actros - ETH 3-12345"
+    },
+    timeline: [
+      {
+        status: "confirmed",
+        title: "ጫነት ተቀባይነት ያገኘ",
+        description: "Driver accepted your shipment",
+        time: "10:30 AM",
+        completed: true
+      },
+      {
+        status: "picked_up",
+        title: "ጫነት ተወስዷል",
+        description: "Cargo picked up from source",
+        time: "11:45 AM", 
+        completed: true
+      },
+      {
+        status: "in_transit",
+        title: "በመንገድ ላይ",
+        description: "On route to destination",
+        time: "12:15 PM",
+        completed: false,
+        active: true
+      },
+      {
+        status: "delivered",
+        title: "ደርሷል",
+        description: "Delivered successfully",
+        time: "Estimated 4:30 PM",
+        completed: false
+      }
+    ],
+    estimatedArrival: "4:30 PM",
+    cargoType: "Electronics",
+    weight: "250 kg"
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending": return "bg-warning text-warning-foreground";
-      case "accepted": return "bg-accent text-accent-foreground";
-      case "picked-up": return "bg-primary text-primary-foreground";
-      case "in-transit": return "bg-accent text-accent-foreground";
-      case "delivered": return "bg-success text-success-foreground";
-      default: return "bg-muted text-muted-foreground";
+      case "confirmed": return "bg-blue-500";
+      case "picked_up": return "bg-yellow-500";
+      case "in_transit": return "bg-primary";
+      case "delivered": return "bg-success";
+      default: return "bg-muted";
     }
   };
 
-  const getStatusIcon = (status: string, isCompleted: boolean) => {
-    if (isCompleted) {
-      return <CheckCircle className="h-4 w-4 text-success" />;
-    }
-    
+  const getStatusBadge = (status: string) => {
     switch (status) {
-      case "pending": return <Clock className="h-4 w-4 text-warning" />;
-      case "accepted": return <CheckCircle className="h-4 w-4 text-accent" />;
-      case "picked-up": return <Package className="h-4 w-4 text-primary" />;
-      case "in-transit": return <Truck className="h-4 w-4 text-accent" />;
-      case "delivered": return <CheckCircle className="h-4 w-4 text-success" />;
-      default: return <Clock className="h-4 w-4 text-muted-foreground" />;
+      case "in_transit": return <Badge className="bg-primary">በመንገድ ላይ (In Transit)</Badge>;
+      case "delivered": return <Badge className="bg-success">ደርሷል (Delivered)</Badge>;
+      case "picked_up": return <Badge className="bg-warning">ተወስዷል (Picked Up)</Badge>;
+      default: return <Badge variant="outline">ይጠበቃል (Pending)</Badge>;
     }
   };
-
-  if (loading) {
-    return (
-      <Card className="animate-pulse">
-        <CardHeader>
-          <div className="h-6 bg-muted rounded w-1/3" />
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="h-4 bg-muted rounded" />
-          <div className="h-4 bg-muted rounded w-2/3" />
-          <div className="h-20 bg-muted rounded" />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (!shipment) {
-    return (
-      <Card>
-        <CardContent className="p-8 text-center">
-          <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
-          <h4 className="text-lg font-semibold mb-2">Shipment Not Found</h4>
-          <p className="text-muted-foreground">
-            Could not find shipment with ID: {shipmentId}
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
-    <div className="space-y-6">
-      {/* Shipment Overview */}
+    <div className="max-w-4xl mx-auto space-y-6 p-4">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center space-x-2">
-              <Package className="h-6 w-6 text-primary" />
+              <Package className="h-5 w-5 text-primary" />
               <span>Shipment {shipment.id}</span>
             </CardTitle>
-            <Badge className={getStatusColor(shipment.currentStatus)}>
-              {shipment.currentStatus.replace("-", " ").toUpperCase()}
-            </Badge>
+            {getStatusBadge(shipment.status)}
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Route and Progress */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold mb-3">Route Information</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center space-x-2">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  <span className="font-medium">From:</span>
-                  <span>{shipment.from}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <MapPin className="h-4 w-4 text-accent" />
-                  <span className="font-medium">To:</span>
-                  <span>{shipment.to}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Package className="h-4 w-4 text-muted-foreground" />
-                  <span className="font-medium">Cargo:</span>
-                  <span>{shipment.cargo} ({shipment.weight})</span>
-                </div>
+          {/* Progress Bar */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Progress</span>
+              <span>{shipment.progress}%</span>
+            </div>
+            <Progress value={shipment.progress} className="h-2" />
+          </div>
+
+          {/* Route Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 rounded-full bg-primary/10">
+                <MapPin className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">From</p>
+                <p className="font-medium">{shipment.pickup}</p>
               </div>
             </div>
-            
-            <div>
-              <h4 className="font-semibold mb-3">Delivery Progress</h4>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span>Overall Progress</span>
-                  <span className="font-bold">{shipment.progress}%</span>
-                </div>
-                <Progress value={shipment.progress} className="h-3" />
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                  <Clock className="h-4 w-4" />
-                  <span>ETA: {shipment.estimatedDelivery}</span>
-                </div>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 rounded-full bg-accent/10">
+                <MapPin className="h-4 w-4 text-accent" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">To</p>
+                <p className="font-medium">{shipment.dropoff}</p>
               </div>
             </div>
           </div>
 
-          {/* Driver Information */}
-          <div className="border-t pt-6">
-            <h4 className="font-semibold mb-3">Driver Information</h4>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                  <Truck className="h-6 w-6 text-primary" />
+          {/* Driver Info */}
+          <Card className="bg-muted/30">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Avatar className="h-12 w-12">
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      {shipment.driver.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h3 className="font-medium">{shipment.driver.name}</h3>
+                    <div className="flex items-center space-x-2">
+                      <Star className="h-4 w-4 text-warning fill-warning" />
+                      <span className="text-sm">{shipment.driver.rating}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{shipment.driver.truck}</p>
+                  </div>
+                </div>
+                <div className="flex space-x-2">
+                  <Button size="sm" variant="outline">
+                    <Phone className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    <MessageSquare className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Timeline */}
+          <div className="space-y-4">
+            <h3 className="font-medium">Shipment Timeline</h3>
+            <div className="space-y-4">
+              {shipment.timeline.map((item, index) => (
+                <div key={index} className="flex items-start space-x-4">
+                  <div className="flex flex-col items-center">
+                    <div className={`w-4 h-4 rounded-full ${
+                      item.completed 
+                        ? 'bg-success' 
+                        : item.active 
+                          ? 'bg-primary animate-pulse' 
+                          : 'bg-muted'
+                    }`} />
+                    {index < shipment.timeline.length - 1 && (
+                      <div className={`w-0.5 h-8 ${
+                        item.completed ? 'bg-success' : 'bg-muted'
+                      }`} />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h4 className={`font-medium ${
+                        item.active ? 'text-primary' : 
+                        item.completed ? 'text-success' : 'text-muted-foreground'
+                      }`}>
+                        {item.title}
+                      </h4>
+                      <span className="text-sm text-muted-foreground">{item.time}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Cargo Details */}
+          <Card className="bg-muted/30">
+            <CardContent className="p-4">
+              <h3 className="font-medium mb-3">Cargo Details</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Type:</span>
+                  <span className="ml-2 font-medium">{shipment.cargoType}</span>
                 </div>
                 <div>
-                  <div className="font-medium">{shipment.driver.name}</div>
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <Star className="h-3 w-3 fill-warning text-warning" />
-                    <span>{shipment.driver.rating}</span>
-                    <span>•</span>
-                    <span>{shipment.driver.vehicleNumber}</span>
-                  </div>
+                  <span className="text-muted-foreground">Weight:</span>
+                  <span className="ml-2 font-medium">{shipment.weight}</span>
                 </div>
               </div>
-              
-              <div className="flex space-x-2">
-                <Button variant="outline" size="sm">
-                  <Phone className="h-4 w-4 mr-1" />
-                  Call
-                </Button>
-                <Button variant="outline" size="sm">
-                  <MessageCircle className="h-4 w-4 mr-1" />
-                  Chat
-                </Button>
-                {onTrackLive && (
-                  <Button size="sm" className="bg-accent hover:bg-accent/90" onClick={onTrackLive}>
-                    <Navigation className="h-4 w-4 mr-1" />
-                    Live Track
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
 
-      {/* Status Timeline */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Shipment Timeline</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {shipment.statusUpdates.map((update, index) => (
-              <div key={update.id} className="flex items-start space-x-4">
-                <div className="flex-shrink-0 mt-1">
-                  {getStatusIcon(update.status, update.isCompleted)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <p className={`text-sm font-medium ${
-                      update.isCompleted ? "text-foreground" : "text-muted-foreground"
-                    }`}>
-                      {update.description}
-                    </p>
-                    <span className="text-xs text-muted-foreground">
-                      {update.timestamp}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {update.location}
-                  </p>
-                </div>
-                {update.status === shipment.currentStatus && !update.isCompleted && (
-                  <Badge className="bg-accent text-accent-foreground text-xs">
-                    Current
-                  </Badge>
-                )}
-              </div>
-            ))}
+          {/* ETA */}
+          <div className="flex items-center justify-center space-x-2 p-4 bg-primary/10 rounded-lg">
+            <Clock className="h-5 w-5 text-primary" />
+            <span className="font-medium">
+              Estimated arrival: {shipment.estimatedArrival}
+            </span>
           </div>
+
+          {onTrackLive && (
+            <Button onClick={onTrackLive} className="w-full">
+              Track Live Location
+            </Button>
+          )}
         </CardContent>
       </Card>
     </div>

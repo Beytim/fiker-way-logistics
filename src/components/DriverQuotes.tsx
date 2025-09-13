@@ -4,21 +4,56 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Star, CheckCircle, DollarSign } from "lucide-react";
 
-const DriverQuotes = () => {
-  const quotes = [
+interface DriverQuote {
+  id: string;
+  driverName: string;
+  rating: number;
+  totalTrips: number;
+  vehicleType: string;
+  vehicleNumber: string;
+  quotedPrice: number;
+  estimatedTime: string;
+  distance: string;
+  isVerified: boolean;
+  specializations: string[];
+  responseTime: string;
+  avatar?: string;
+}
+
+interface DriverQuotesProps {
+  shipmentId?: string;
+  onSelectDriver?: (quote: DriverQuote) => void;
+}
+
+const DriverQuotes = ({ shipmentId, onSelectDriver }: DriverQuotesProps) => {
+  const quotes: DriverQuote[] = [
     {
       id: "Q001",
-      driver: "አለማየሁ ታደሰ",
+      driverName: "አለማየሁ ታደሰ",
       rating: 4.9,
-      amount: 18500,
-      truck: "Mercedes Actros"
+      quotedPrice: 18500,
+      vehicleType: "Mercedes Actros",
+      vehicleNumber: "ETH-3-12345",
+      totalTrips: 150,
+      estimatedTime: "6 hours",
+      distance: "420 km",
+      isVerified: true,
+      specializations: ["Electronics", "Fragile Items"],
+      responseTime: "2 minutes"
     },
     {
       id: "Q002", 
-      driver: "መሰረት በቀለ",
+      driverName: "መሰረት በቀለ",
       rating: 4.7,
-      amount: 17200,
-      truck: "Volvo FH16"
+      quotedPrice: 17200,
+      vehicleType: "Volvo FH16",
+      vehicleNumber: "ETH-5-67890",
+      totalTrips: 89,
+      estimatedTime: "5.5 hours",
+      distance: "420 km",
+      isVerified: true,
+      specializations: ["General Cargo", "Construction Materials"],
+      responseTime: "5 minutes"
     }
   ];
 
@@ -33,25 +68,32 @@ const DriverQuotes = () => {
               <div className="flex items-center space-x-4">
                 <Avatar className="h-12 w-12">
                   <AvatarFallback className="bg-primary text-primary-foreground">
-                    {quote.driver.split(' ').map(n => n[0]).join('')}
+                    {quote.driverName.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
                 
                 <div>
-                  <h3 className="font-semibold">{quote.driver}</h3>
+                  <h3 className="font-semibold">{quote.driverName}</h3>
                   <div className="flex items-center space-x-2">
                     <Star className="h-4 w-4 text-warning fill-warning" />
                     <span>{quote.rating}</span>
-                    <Badge variant="outline">{quote.truck}</Badge>
+                    <Badge variant="outline">{quote.vehicleType}</Badge>
+                    {quote.isVerified && <Badge className="bg-success">Verified</Badge>}
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {quote.totalTrips} trips • {quote.estimatedTime} • {quote.distance}
                   </div>
                 </div>
               </div>
 
               <div className="text-right">
                 <div className="text-2xl font-bold text-success">
-                  {quote.amount.toLocaleString()} ETB
+                  {quote.quotedPrice.toLocaleString()} ETB
                 </div>
-                <Button className="mt-2">
+                <Button 
+                  className="mt-2"
+                  onClick={() => onSelectDriver?.(quote)}
+                >
                   <CheckCircle className="h-4 w-4 mr-2" />
                   ምላሽ ተቀበል
                 </Button>

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import ShipmentForm from "./ShipmentForm";
 import DriverQuotes from "./DriverQuotes";
 import ShipmentStatus from "./ShipmentStatus";
+import PaymentSystem from "./PaymentSystem";
 import { 
   Package, 
   MapPin, 
@@ -51,6 +52,7 @@ const ShipperDashboard = () => {
   const [currentShipmentId, setCurrentShipmentId] = useState<string | null>(null);
   const [showQuotes, setShowQuotes] = useState(false);
   const [viewingShipment, setViewingShipment] = useState<string | null>(null);
+  const [showPayment, setShowPayment] = useState<{shipmentId: string, amount: number} | null>(null);
 
   const shipments = [
     {
@@ -221,6 +223,14 @@ const ShipperDashboard = () => {
               // Navigate to live tracking
               window.location.href = `/track?id=${viewingShipment}`;
             }}
+          />
+        )}
+
+        {showPayment && (
+          <PaymentSystem 
+            amount={showPayment.amount} 
+            shipmentId={showPayment.shipmentId}
+            onPaymentComplete={() => setShowPayment(null)}
           />
         )}
 

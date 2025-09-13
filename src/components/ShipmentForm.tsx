@@ -7,7 +7,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Package, MapPin, Plus } from "lucide-react";
 import { toast } from "sonner";
 
-const ShipmentForm = () => {
+interface ShipmentFormData {
+  pickupLocation: string;
+  deliveryLocation: string;
+  cargoType: string;
+  weight: string;
+  dimensions: string;
+  pickupDate: string;
+  deliveryDate: string;
+  specialInstructions: string;
+  budget: string;
+  urgency: "low" | "medium" | "high";
+}
+
+interface ShipmentFormProps {
+  onSubmit?: (data: ShipmentFormData) => void;
+}
+
+const ShipmentForm = ({ onSubmit }: ShipmentFormProps) => {
   const [formData, setFormData] = useState({
     pickupLocation: "",
     dropoffLocation: "",
@@ -18,6 +35,20 @@ const ShipmentForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const shipmentData: ShipmentFormData = {
+      pickupLocation: formData.pickupLocation,
+      deliveryLocation: formData.dropoffLocation,
+      cargoType: formData.cargoType,
+      weight: formData.weight,
+      dimensions: "",
+      pickupDate: "",
+      deliveryDate: "",
+      specialInstructions: "",
+      budget: "",
+      urgency: "medium"
+    };
+    
+    onSubmit?.(shipmentData);
     toast.success("ጫነት ተመዝግቧል! (Shipment posted!)");
   };
 
