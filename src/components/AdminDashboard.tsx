@@ -153,6 +153,16 @@ const AdminDashboard = () => {
             >
               Verifications
             </button>
+            <button
+              onClick={() => setActiveTab("payments")}
+              className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === "payments"
+                  ? "border-primary text-primary" 
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Payments
+            </button>
           </nav>
         </div>
       </div>
@@ -463,6 +473,128 @@ const AdminDashboard = () => {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === "payments" && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">Payment Management</h2>
+              <div className="flex items-center space-x-3">
+                <Badge className="bg-success text-success-foreground">
+                  284.7K ETB This Month
+                </Badge>
+                <Button variant="outline" size="sm">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filter
+                </Button>
+              </div>
+            </div>
+
+            {/* Payment Stats */}
+            <div className="grid md:grid-cols-4 gap-4 mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <DollarSign className="h-8 w-8 text-success mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Total Revenue</p>
+                    <p className="text-xl font-bold text-success">2.84M ETB</p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <CheckCircle className="h-8 w-8 text-success mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Successful</p>
+                    <p className="text-xl font-bold">3,421</p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <AlertTriangle className="h-8 w-8 text-warning mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Pending</p>
+                    <p className="text-xl font-bold">23</p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <AlertTriangle className="h-8 w-8 text-destructive mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Failed</p>
+                    <p className="text-xl font-bold">15</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Recent Payments */}
+            <div className="grid gap-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Payments</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {[
+                    { id: "PAY-001", shipment: "FW-001", amount: "15,400", method: "Chapa", status: "completed", date: "2 hours ago" },
+                    { id: "PAY-002", shipment: "FW-002", amount: "8,200", method: "Telebirr", status: "completed", date: "4 hours ago" },
+                    { id: "PAY-003", shipment: "FW-003", amount: "12,500", method: "Cash", status: "pending", date: "1 day ago" },
+                    { id: "PAY-004", shipment: "FW-004", amount: "9,800", method: "Wallet", status: "failed", date: "2 days ago" }
+                  ].map((payment) => (
+                    <div key={payment.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <Badge variant="outline" className="font-mono text-xs">
+                            {payment.id}
+                          </Badge>
+                          <Badge 
+                            className={
+                              payment.status === "completed" ? "bg-success text-success-foreground" :
+                              payment.status === "pending" ? "bg-warning text-warning-foreground" :
+                              "bg-destructive text-destructive-foreground"
+                            }
+                          >
+                            {payment.status.toUpperCase()}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">{payment.date}</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <p className="text-muted-foreground">Shipment</p>
+                            <p className="font-medium">{payment.shipment}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Method</p>
+                            <p className="font-medium">{payment.method}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Amount</p>
+                            <p className="font-bold text-success">{payment.amount} ETB</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Button variant="outline" size="sm">
+                          <Eye className="h-4 w-4 mr-1" />
+                          View
+                        </Button>
+                        {payment.status === "failed" && (
+                          <Button size="sm" variant="destructive">
+                            Refund
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
             </div>
           </div>
         )}
