@@ -6,6 +6,9 @@ import ShipmentForm from "./ShipmentForm";
 import DriverQuotes from "./DriverQuotes";
 import ShipmentStatus from "./ShipmentStatus";
 import PaymentSystem from "./PaymentSystem";
+import MessagingSystem from "./MessagingSystem";
+import RealTimeMap from "./RealTimeMap";
+import QuickActions from "./QuickActions";
 import { 
   Package, 
   MapPin, 
