@@ -1,0 +1,70 @@
+{
+  "name": "FikerWay - Ethiopia's Logistics Platform",
+  "short_name": "FikerWay",
+  "description": "Ethiopia's trusted freight network connecting shippers with verified drivers",
+  "theme_color": "#1a5930",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "categories": ["business", "productivity", "transportation"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ship Load",
+      "short_name": "Ship",
+      "description": "Post a new shipment",
+      "url": "/shipper",
+      "icons": [{ "src": "/icons/ship-icon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Track Shipment",
+      "short_name": "Track",
+      "description": "Track your shipments",
+      "url": "/track",
+      "icons": [{ "src": "/icons/track-icon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Driver Portal",
+      "short_name": "Drive",
+      "description": "Access driver dashboard",
+      "url": "/driver",
+      "icons": [{ "src": "/icons/driver-icon.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/mobile-home.png",
+      "sizes": "360x640",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}

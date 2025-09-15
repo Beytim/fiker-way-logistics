@@ -4,13 +4,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navigation from "./components/Navigation";
+import MobileLayout from "./components/MobileLayout";
+import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import Index from "./pages/Index";
 import TrackingPage from "./pages/TrackingPage";
 import NotFound from "./pages/NotFound";
-import ShipperDashboard from "./components/ShipperDashboard";
-import DriverDashboard from "./components/DriverDashboard";
-import AdminDashboard from "./components/AdminDashboard";
+import UnifiedDashboard from "./components/UnifiedDashboard";
 
 const queryClient = new QueryClient();
 
@@ -19,15 +18,41 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <PWAInstallPrompt />
       <BrowserRouter>
-        <Navigation />
         <Routes>
+          {/* Landing page without mobile layout */}
           <Route path="/" element={<Index />} />
-          <Route path="/track" element={<TrackingPage />} />
-          <Route path="/shipper" element={<ShipperDashboard />} />
-          <Route path="/driver" element={<DriverDashboard />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          
+          {/* All dashboard routes with mobile layout */}
+          <Route path="/shipper" element={
+            <MobileLayout>
+              <div className="container mx-auto px-4 py-8">
+                <UnifiedDashboard userType="shipper" />
+              </div>
+            </MobileLayout>
+          } />
+          <Route path="/driver" element={
+            <MobileLayout>
+              <div className="container mx-auto px-4 py-8">
+                <UnifiedDashboard userType="driver" />
+              </div>
+            </MobileLayout>
+          } />
+          <Route path="/admin" element={
+            <MobileLayout>
+              <div className="container mx-auto px-4 py-8">
+                <UnifiedDashboard userType="admin" />
+              </div>
+            </MobileLayout>
+          } />
+          <Route path="/track" element={
+            <MobileLayout>
+              <TrackingPage />
+            </MobileLayout>
+          } />
+          
+          {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

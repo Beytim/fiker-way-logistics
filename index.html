@@ -2,23 +2,67 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>FikerWay - Ethiopia's Trusted Freight Network</title>
     <meta name="description" content="Connect shippers with verified drivers across Ethiopia. Safe, reliable, and culturally adapted logistics platform for Ethiopian businesses." />
     <meta name="author" content="FikerWay" />
+    <meta name="keywords" content="Ethiopia, logistics, freight, shipping, transport, drivers, cargo, delivery" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1a5930" />
+    <meta name="msapplication-TileColor" content="#1a5930" />
+    <meta name="application-name" content="FikerWay" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="FikerWay" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-starturl" content="/" />
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-192.png" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
+    <!-- Open Graph -->
     <meta property="og:title" content="FikerWay - Ethiopia's Trusted Freight Network" />
     <meta property="og:description" content="Connect shippers with verified drivers across Ethiopia. Safe, reliable, and culturally adapted logistics platform." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:url" content="https://fikerway.com" />
+    <meta property="og:site_name" content="FikerWay" />
 
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
+    <meta name="twitter:site" content="@fikerway" />
+    <meta name="twitter:title" content="FikerWay - Ethiopia's Logistics Platform" />
+    <meta name="twitter:description" content="Connecting Ethiopian shippers with verified drivers" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) {
+              console.log('SW registered: ', registration);
+            }, function(registrationError) {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
