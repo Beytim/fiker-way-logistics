@@ -4,12 +4,11 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MobileLayout from "./components/MobileLayout";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import Index from "./pages/Index";
 import TrackingPage from "./pages/TrackingPage";
 import NotFound from "./pages/NotFound";
-import UnifiedDashboard from "./components/UnifiedDashboard";
+import EnhancedDashboard from "./components/EnhancedDashboard";
 
 const queryClient = new QueryClient();
 
@@ -26,30 +25,16 @@ const App = () => (
           
           {/* All dashboard routes with mobile layout */}
           <Route path="/shipper" element={
-            <MobileLayout>
-              <div className="container mx-auto px-4 py-8">
-                <UnifiedDashboard userType="shipper" />
-              </div>
-            </MobileLayout>
+            <EnhancedDashboard userType="shipper" userName="Demo Shipper" userRating={4.7} />
           } />
           <Route path="/driver" element={
-            <MobileLayout>
-              <div className="container mx-auto px-4 py-8">
-                <UnifiedDashboard userType="driver" />
-              </div>
-            </MobileLayout>
+            <EnhancedDashboard userType="driver" userName="Alemayehu Tadesse" userRating={4.9} />
           } />
           <Route path="/admin" element={
-            <MobileLayout>
-              <div className="container mx-auto px-4 py-8">
-                <UnifiedDashboard userType="admin" />
-              </div>
-            </MobileLayout>
+            <EnhancedDashboard userType="admin" userName="Admin User" userRating={4.8} />
           } />
           <Route path="/track" element={
-            <MobileLayout>
-              <TrackingPage />
-            </MobileLayout>
+            <TrackingPage />
           } />
           
           {/* Catch-all route */}
