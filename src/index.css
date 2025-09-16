@@ -63,6 +63,10 @@ All colors MUST be HSL for proper theme support
     --shadow-strong: 0 8px 24px hsl(140 50% 20% / 0.16);
     --shadow-trust: 0 4px 16px hsl(200 90% 45% / 0.15);
 
+    /* Animation variables */
+    --animation-duration: 0.3s;
+    --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
@@ -160,5 +164,64 @@ All colors MUST be HSL for proper theme support
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+  
+  /* Enhanced animations */
+  .animate-fade-in {
+    animation: fadeIn var(--animation-duration) var(--animation-timing);
+  }
+  
+  .animate-slide-up {
+    animation: slideUp var(--animation-duration) var(--animation-timing);
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn var(--animation-duration) var(--animation-timing);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes scaleIn {
+    from { 
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to { 
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Improved hover effects */
+  .hover-lift {
+    transition: transform var(--animation-duration) var(--animation-timing);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Enhanced focus states */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
+  }
+  
+  /* Smooth transitions for all interactive elements */
+  button, input, select, textarea {
+    transition: all var(--animation-duration) var(--animation-timing);
   }
 }

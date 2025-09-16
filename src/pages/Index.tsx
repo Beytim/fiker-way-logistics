@@ -4,6 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; 
+import EnhancedHeader from "@/components/EnhancedHeader";
+import SmartRouteOptimizer from "@/components/SmartRouteOptimizer";
+import AdvancedAnalytics from "@/components/AdvancedAnalytics";
+import CustomerSupport from "@/components/CustomerSupport";
 import ShipmentForm from "@/components/ShipmentForm";
 import DriverQuotes from "@/components/DriverQuotes";
 import ShipmentStatus from "@/components/ShipmentStatus";
@@ -177,30 +181,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Truck className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold text-primary">{t.hero.title}</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={toggleLanguage}
-              className="flex items-center space-x-1"
-            >
-              <Globe className="h-4 w-4" />
-              <span>{language}</span>
-            </Button>
-            <Button variant="outline" size="sm" className="hidden sm:flex">
-              <Phone className="h-4 w-4 mr-1" />
-              Contact
-            </Button>
-          </div>
-        </div>
-      </header>
+      {/* Enhanced Header */}
+      <EnhancedHeader />
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-16 overflow-hidden">
@@ -403,7 +385,7 @@ const Index = () => {
           </div>
 
           <Tabs value={activeDemo} onValueChange={setActiveDemo} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 mb-8">
+            <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 mb-8">
               <TabsTrigger value="shipment" className="text-xs">Ship Load</TabsTrigger>
               <TabsTrigger value="tracking" className="text-xs">Live Track</TabsTrigger>
               <TabsTrigger value="quotes" className="text-xs">Get Quotes</TabsTrigger>
@@ -412,6 +394,8 @@ const Index = () => {
               <TabsTrigger value="analytics" className="text-xs">Analytics</TabsTrigger>
               <TabsTrigger value="vehicles" className="text-xs">Fleet</TabsTrigger>
               <TabsTrigger value="map" className="text-xs">Map View</TabsTrigger>
+              <TabsTrigger value="route-optimizer" className="text-xs">Route AI</TabsTrigger>
+              <TabsTrigger value="support" className="text-xs">Support</TabsTrigger>
             </TabsList>
 
             <div className="max-w-6xl mx-auto">
@@ -509,11 +493,11 @@ const Index = () => {
                   <CardHeader>
                     <div className="flex items-center space-x-2">
                       <BarChart3 className="h-5 w-5 text-primary" />
-                      <CardTitle>Business Analytics</CardTitle>
+                      <CardTitle>Advanced Analytics</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <AnalyticsDashboard userType="admin" />
+                    <AdvancedAnalytics userType="admin" />
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -544,6 +528,43 @@ const Index = () => {
                     <div className="h-96">
                       <RealTimeMap />
                     </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="route-optimizer">
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center space-x-2">
+                      <Navigation className="h-5 w-5 text-accent" />
+                      <CardTitle>AI Route Optimizer</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <SmartRouteOptimizer 
+                      origin="Addis Ababa"
+                      destination="Dire Dawa"
+                      cargoWeight={2500}
+                      vehicleType="Medium Truck"
+                      onRouteSelect={(route) => {
+                        console.log("Selected route:", route);
+                        toast.success("Route optimized successfully!");
+                      }}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="support">
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center space-x-2">
+                      <Headphones className="h-5 w-5 text-primary" />
+                      <CardTitle>Customer Support</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <CustomerSupport userType="shipper" />
                   </CardContent>
                 </Card>
               </TabsContent>
